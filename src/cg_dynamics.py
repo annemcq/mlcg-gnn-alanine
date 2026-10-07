@@ -41,19 +41,30 @@ def run_langevin(
     -------
     trajectory_nm : (n_steps // save_every, n_beads, 3)
     """
-    rng = np.random.default_rng(seed)
+    generator = torch.Generator()
+    generator.manual_seed(seed)
     model.eval()
 
     n_beads = initial_positions_nm.shape[0]
-    m = torch.as_tensor(masses_amu, dtype=torch.float32).reshape(-1, 1)  # (n_beads, 1)
+    m = torch.as_tensor(
+        masses_amu,
+        dtype=torch.float32,
+    ).reshape(-1, 1)  # (n_beads, 1)
+
     kT = KB_KJ_PER_MOL_K * temperature_k
     gamma = friction_per_ps
 
-    pos = torch.as_tensor(initial_positions_nm, dtype=torch.float32).unsqueeze(0)  # (1, n_beads, 3)
+    pos = torch.as_tensor(
+        initial_positions_nm,
+        dtype=torch.float32,
+    ).unsqueeze(0)  # (1, n_beads, 3)
+
     vel = torch.zeros_like(pos)
 
     a = np.exp(-gamma * timestep_ps)
-    b = np.sqrt(kT * (1 - a ** 2) / m.numpy())  # (n_beads, 1), velocity noise scale
+    b = np.sqrt(
+        kT * (1 - a ** 2) / m.numpy()
+    )  # (n_beads, 1), velocity noise scale
 
     def get_forces(p):
         _, f = model(p)
@@ -66,18 +77,34 @@ def run_langevin(
     for step in range(n_steps):
         # B: half-kick with current forces
         vel = vel + 0.5 * dt * forces / m
+
         # A: half-drift
         pos = pos + 0.5 * dt * vel
-        # O: Ornstein-Uhlenbeck friction+noise
-        noise = torch.randn_like(vel) * torch.as_tensor(b, dtype=torch.float32)
+
+        # O: Ornstein-Uhlenbeck friction + noise
+        noise = torch.randn(
+            vel.shape,
+            dtype=vel.dtype,
+            device=vel.device,
+            generator=generator,
+        ) * torch.as_tensor(
+            b,
+            dtype=vel.dtype,
+            device=vel.device,
+        )
+
         vel = a * vel + noise
+
         # A: half-drift
         pos = pos + 0.5 * dt * vel
+
         # B: half-kick with new forces
         forces = get_forces(pos)
         vel = vel + 0.5 * dt * forces / m
 
         if (step + 1) % save_every == 0:
-            saved.append(pos.squeeze(0).numpy().copy())
+            saved.append(
+                pos.squeeze(0).numpy().copy()
+            )
 
     return np.array(saved)

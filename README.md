@@ -72,7 +72,7 @@ The model is trained by force matching against the mapped forces from the atomis
 
 The dataset is split into training and validation sets, and the GNN correction is optimized using Adam. The harmonic prior is fitted from the mapped reference configurations and remains fixed during optimization.
 
-The training script saves the learned GNN weights, prior parameters, CG trajectory data and training history.
+The training script saves the learned GNN weights, prior parameters, mapped CG dataset, dihedral validation data and training history.
 
 ![Training curve](results/figures/training_curve.png)
 
@@ -183,6 +183,7 @@ The test suite checks several properties of the implementation:
 - combination of prior and GNN energies
 - consistent energy/force scaling
 - calculation of a known dihedral geometry
+- reproducibility of Langevin dynamics for a fixed random seed
 
 The tests do not require OpenMM or regeneration of the reference trajectory.
 

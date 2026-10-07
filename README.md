@@ -183,6 +183,7 @@ The test suite checks several properties of the implementation:
 - combination of prior and GNN energies
 - consistent energy/force scaling
 - calculation of a known dihedral geometry
+- reproducibility of Langevin dynamics for a fixed random seed
 
 The tests do not require OpenMM or regeneration of the reference trajectory.
 

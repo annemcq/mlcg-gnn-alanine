@@ -84,7 +84,7 @@ The main validation compares the conformational distribution sampled by the lear
 
 ![Ramachandran comparison](results/figures/ramachandran_comparison.png)
 
-The model reproduces the location of the dominant conformational basin of the reference trajectory. However, the CG simulation does not resolve the second major basin during the sampled trajectory and also visits a region that is barely populated in the reference data.
+The CG dynamics samples the main conformational regions of the reference trajectory in approximately the same areas of pseudo-phi/psi space. However, the relative populations and overall distribution are not reproduced well: the CG trajectory is more diffuse and also visits regions that are only sparsely populated in the reference data.
 
 This suggests that the learned energy surface is not well constrained outside the configurations represented in the training trajectory.
 

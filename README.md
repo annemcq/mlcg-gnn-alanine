@@ -56,7 +56,7 @@ U_{\mathrm{prior}} =
 \frac{1}{2} k_{ij}(d_{ij}-d_{ij}^{0})^2
 \]
 
-The equilibrium distances and force constants are estimated from the bond-length statistics of the training data.
+The equilibrium distances and force constants are estimated from the bond-length statistics of the mapped reference data.
 
 The final energy is
 
@@ -70,7 +70,7 @@ so the harmonic term maintains the bonded structure while the GNN learns the rem
 
 The model is trained by force matching against the mapped forces from the atomistic trajectory.
 
-The dataset is split into training and validation sets, and the GNN correction is optimized using Adam. The harmonic prior is fitted from the training configurations and remains fixed during optimization.
+The dataset is split into training and validation sets, and the GNN correction is optimized using Adam. The harmonic prior is fitted from the mapped reference configurations and remains fixed during optimization.
 
 The training script saves the learned GNN weights, prior parameters, CG trajectory data and training history.
 

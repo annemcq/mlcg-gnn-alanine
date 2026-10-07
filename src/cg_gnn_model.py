@@ -147,7 +147,7 @@ class HarmonicBondPrior(nn.Module):
     """
     Harmonic prior for consecutive bonded beads.
 
-    Equilibrium distances are estimated from the training data and the
+    Equilibrium distances are estimated from the mapped reference data and the
     force constants are obtained from k = kT / Var(d).
     """
 

@@ -201,6 +201,11 @@ Finally, the CG representation contains only five beads and uses a simple harmon
 
 Python, PyTorch, OpenMM, NumPy and matplotlib.
 
+## Related projects
+
+- [CG Force Field API](https://github.com/annemcq/cgnet-api) — interactive deployment of the trained coarse-grained force field.
+- [Free Energy: MBAR & Zwanzig](https://github.com/annemcq/free-energy-mbar-zwanzig) — a separate project applying statistical-mechanics free-energy estimators to umbrella-sampling data.
+
 ## License
 
 This project is available under the MIT License.

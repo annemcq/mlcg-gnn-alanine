@@ -92,7 +92,14 @@ This suggests that the learned energy surface is not well constrained outside th
 
 This project showed that a decreasing force-matching loss is not enough to establish whether the learned model reproduces the reference conformational distribution.
 
-A three-seed 5,000-step test of the GNN-only model does not reproduce the earlier instability claim: the maximum absolute bead displacement was 0.299, 0.308, and 0.294 nm for seeds 1–3, respectively, compared with an expected extent of roughly ±0.3 nm around the center of mass. A preliminary distribution check gave JSD around 0.71 bits for GNN-only versus 0.46 bits for prior + GNN against the mapped reference. However, the GNN-only model was trained for 15 epochs and the correction for 60, so this is **not a controlled comparison**; an equal-epoch, multi-seed experiment is still needed before attributing the difference to the prior.
+A three-seed 5,000-step test of the GNN-only model does not reproduce the earlier instability claim: the maximum absolute bead displacement was 0.299, 0.308, and 0.294 nm for seeds 1–3, respectively, compared with an expected extent of roughly ±0.3 nm around the center of mass. I then ran a matched-training comparison with **60 epochs for each model**, the same mapped data and optimization setup, and three 100,000-step Langevin trajectories per model. Both models used the same dynamics seeds (1–3), 300 K, and the same 300-frame burn-in. The pseudo-phi/psi JSD against the mapped reference (bits; lower is better) was:
+
+| Model | Seed 1 | Seed 2 | Seed 3 | Pooled JSD |
+|---|---:|---:|---:|---:|
+| GNN-only | 0.8512 | 0.9202 | 0.8325 | **0.8582** |
+| Prior + GNN | 0.7164 | 0.6050 | 0.5104 | **0.5825** |
+
+In all three matched dynamics seeds, **prior + GNN was closer to the mapped reference distribution**. The pooled JSD was lower by about **0.276 bits**. This supports a conformational-distribution benefit from adding the bonded prior under the tested training and simulation settings; it does **not** establish that GNN-only dynamics are unstable. The comparison uses one training initialization per model and three related simulations of the same small molecular system, so the improvement should not be treated as a general statistical guarantee. Full per-seed results, including bond-range checks, are generated in `results/controlled_prior_ablation.csv` by `scripts/05_compare_prior_ablation.py`.
 
 The final model's conformational distribution also shows that geometrically well-behaved dynamics are not enough. Sampling regions that are poorly represented in the training data remains a problem.
 
@@ -174,7 +181,7 @@ Run the controlled prior ablation (60 training epochs for both models, three 100
 python scripts/05_compare_prior_ablation.py
 ```
 
-This experiment can take a long time on CPU. Only update the conclusions after checking its generated results.
+This experiment can take a long time on CPU. The results table above comes from the completed 60-epoch, three-seed run; the script produces the underlying CSV locally.
 
 Run the tests:
 

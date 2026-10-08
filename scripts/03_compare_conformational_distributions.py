@@ -7,9 +7,13 @@ Jensen-Shannon divergence between 2D phi/psi histograms.
 """
 
 from pathlib import Path
+import sys
 
 import numpy as np
 import pandas as pd
+
+BASE = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(BASE))
 
 from src.conformational_metrics import conformational_js_divergence
 

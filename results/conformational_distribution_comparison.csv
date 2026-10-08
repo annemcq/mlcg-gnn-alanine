@@ -1,2 +1,2 @@
-metric,value_bits,n_bins_per_angle,aa_samples,cg_samples
-Jensen-Shannon divergence,0.19168234856749078,36,20000,20000
+metric,value_bits,n_bins_per_angle,aa_samples,cg_samples,reference_half_jsd_bits
+Jensen-Shannon divergence,0.19168234856749078,36,20000,20000,0.02198202668216364

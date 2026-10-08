@@ -32,15 +32,15 @@ For each configuration, the five CG beads form a fully connected graph. Pairwise
 
 The network predicts a scalar energy
 
-\[
+$$
 U_{\mathrm{GNN}}(R)
-\]
+$$
 
 and the corresponding forces are calculated using automatic differentiation:
 
-\[
+$$
 F_i = -\frac{\partial U}{\partial R_i}
-\]
+$$
 
 Because the energy depends on pairwise distances, it is invariant to global translation and rotation.
 
@@ -50,19 +50,19 @@ An initial version of the model used the GNN alone. Although the force-matching 
 
 To constrain these degrees of freedom, the final model includes a harmonic prior on consecutive CG beads:
 
-\[
+$$
 U_{\mathrm{prior}} =
 \sum_{(i,j)}
 \frac{1}{2} k_{ij}(d_{ij}-d_{ij}^{0})^2
-\]
+$$
 
 The equilibrium distances and force constants are estimated from the bond-length statistics of the mapped reference data.
 
 The final energy is
 
-\[
+$$
 U(R) = U_{\mathrm{prior}}(R) + U_{\mathrm{GNN}}(R)
-\]
+$$
 
 so the harmonic term maintains the bonded structure while the GNN learns the remaining correction.
 
@@ -126,10 +126,9 @@ mlcg-gnn-alanine/
 │   └── 03_train_and_validate_cgnet.ipynb
 │
 ├── results/
-│   └── figures/
-│       ├── training_curve.png
-│       └── ramachandran_comparison.png
-│
+│   ├── figures/
+│   │   ├── training_curve.png
+│   │   └── ramachandran_comparison.png
 │   └── conformational_distribution_comparison.csv
 │
 ├── tests/

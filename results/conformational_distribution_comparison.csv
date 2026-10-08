@@ -1,2 +1,2 @@
-metric,value_bits,n_bins_per_angle,aa_samples,cg_samples,reference_half_jsd_bits
-Jensen-Shannon divergence,0.19168234856749078,36,20000,20000,0.02198202668216364
+metric,value_bits,n_bins_per_angle,reference_samples,cg_dynamics_samples,reference_half_jsd_bits,reference_1700_vs_1700_jsd_bits,n_steps_per_seed,n_seeds
+CG dynamics vs mapped reference JSD,0.4633917967203578,36,20000,14100,0.02091170192241666,0.07842697073020405,100000,3

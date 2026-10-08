@@ -84,7 +84,7 @@ The main validation compares the conformational distribution sampled by the lear
 
 ![Ramachandran comparison](results/figures/ramachandran_comparison.png)
 
-The CG dynamics samples the main conformational regions of the reference trajectory in approximately the same areas of pseudo-phi/psi space. However, the relative populations and overall distribution are not reproduced well: the CG trajectory is more diffuse and also visits regions that are only sparsely populated in the reference data. A quantitative comparison of the 2D phi/psi histograms gives a Jensen-Shannon divergence of 0.1917 bits (36 bins per angle), confirming that the distributions are similar enough to overlap but still differ substantially in population.
+The CG dynamics samples the main conformational regions of the reference trajectory in approximately the same areas of pseudo-phi/psi space. However, the relative populations and overall distribution are not reproduced well: the CG trajectory is more diffuse and also visits regions that are only sparsely populated in the reference data. A quantitative comparison of the 2D phi/psi histograms gives a Jensen-Shannon divergence of 0.1917 bits (36 bins per angle). Splitting the reference trajectory in half gives a 0.0220-bit reference-vs-reference JSD with the same metric, so the AA-vs-CG difference is about 8.7× larger than this simple sampling-noise baseline. The two trajectories contain 20,000 samples each; the remaining difference is therefore not explained by the sample-count imbalance flagged in earlier drafts.
 
 This suggests that the learned energy surface is not well constrained outside the configurations represented in the training trajectory.
 

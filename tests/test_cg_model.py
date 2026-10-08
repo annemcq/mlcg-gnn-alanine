@@ -228,7 +228,7 @@ def test_langevin_seed_is_reproducible():
 
 
 def test_js_divergence_is_zero_for_identical_distributions():
-    from scripts.03_compare_conformational_distributions import js_divergence
+    from src.conformational_metrics import js_divergence
 
     p = np.array([0.2, 0.3, 0.5])
     assert abs(js_divergence(p, p)) < 1e-10

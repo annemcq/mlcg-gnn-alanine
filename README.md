@@ -92,7 +92,7 @@ This suggests that the learned energy surface is not well constrained outside th
 
 This project showed an important limitation of force matching: obtaining a decreasing force-matching loss does not by itself guarantee stable molecular dynamics.
 
-The GNN-only model could fit forces on sampled configurations while still producing unstable trajectories when used recursively during simulation. In a short 5,000-step test, bead positions ranged from -0.580 to 0.392 nm, compared with an expected molecular extent of roughly ±0.3 nm around the center of mass. Adding a simple physical prior was necessary to keep the CG geometry and overall molecular extent within a reasonable range.
+A three-seed 5,000-step test of the GNN-only model does not reproduce the earlier instability claim: the maximum absolute bead displacement was 0.299, 0.308, and 0.294 nm for seeds 1–3, respectively, compared with an expected extent of roughly ±0.3 nm around the center of mass. The harmonic prior is therefore retained as a physically motivated component of the final model, but this short multi-seed test does not by itself establish that the GNN-only model is unstable.
 
 The final model is therefore more stable, but the conformational distribution also shows that stability alone is not enough. Sampling regions that are poorly represented in the training data remains a problem.
 

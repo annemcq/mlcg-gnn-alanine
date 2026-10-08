@@ -34,6 +34,11 @@ def main():
 
     jsd = conformational_js_divergence(phi_psi_aa, phi_psi_cg)
 
+    midpoint = len(phi_psi_aa) // 2
+    aa_half_1 = phi_psi_aa[:midpoint]
+    aa_half_2 = phi_psi_aa[midpoint:]
+    reference_half_jsd = conformational_js_divergence(aa_half_1, aa_half_2)
+
     RESULTS_DIR.mkdir(exist_ok=True)
     output = RESULTS_DIR / "conformational_distribution_comparison.csv"
 
@@ -43,6 +48,7 @@ def main():
         "n_bins_per_angle": N_BINS,
         "aa_samples": len(phi_psi_aa),
         "cg_samples": len(phi_psi_cg),
+        "reference_half_jsd_bits": reference_half_jsd,
     }]).to_csv(output, index=False)
 
     print("=== AA vs CG conformational distribution ===")
@@ -50,6 +56,8 @@ def main():
     print(f"Histogram bins per angle: {N_BINS}")
     print(f"AA samples: {len(phi_psi_aa)}")
     print(f"CG samples: {len(phi_psi_cg)}")
+    print(f"Reference half-vs-half JSD: {reference_half_jsd:.4f} bits")
+    print(f"AA-vs-CG / reference baseline: {jsd / reference_half_jsd:.2f}x")
     print(f"Saved: {output}")
 
 

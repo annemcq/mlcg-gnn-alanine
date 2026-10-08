@@ -46,7 +46,7 @@ Because the energy depends on pairwise distances, it is invariant to global tran
 
 ## Harmonic prior
 
-An initial version of the model used the GNN alone. Although the force-matching loss decreased during training, simulations driven by this model became unstable and the distances between bonded beads grew far outside the range observed in the reference trajectory.
+An initial version of the model used the GNN alone. Although the force-matching loss decreased during training, simulations driven by this model became unstable, with bead positions leaving the physically sensible extent observed for the reference molecule.
 
 To constrain these degrees of freedom, the final model includes a harmonic prior on consecutive CG beads:
 
@@ -92,7 +92,7 @@ This suggests that the learned energy surface is not well constrained outside th
 
 This project showed an important limitation of force matching: obtaining a decreasing force-matching loss does not by itself guarantee stable molecular dynamics.
 
-The GNN-only model could fit forces on sampled configurations while still producing unstable trajectories when used recursively during simulation. In a short 5,000-step test, bead positions ranged from -0.580 to 0.392 nm, compared with an expected molecular extent of roughly ±0.3 nm around the center of mass. Adding a simple physical prior was necessary to keep the bonded degrees of freedom within a reasonable range.
+The GNN-only model could fit forces on sampled configurations while still producing unstable trajectories when used recursively during simulation. In a short 5,000-step test, bead positions ranged from -0.580 to 0.392 nm, compared with an expected molecular extent of roughly ±0.3 nm around the center of mass. Adding a simple physical prior was necessary to keep the CG geometry and overall molecular extent within a reasonable range.
 
 The final model is therefore more stable, but the conformational distribution also shows that stability alone is not enough. Sampling regions that are poorly represented in the training data remains a problem.
 

@@ -23,7 +23,7 @@ from src.cg_gnn_model import CGSchNetLike, ScaledForceModel
 DATA_DIR = BASE / "data"
 RESULTS_DIR = BASE / "results"
 
-MASS_AMU = np.array([43.044, 15.018, 28.052, 30.052, 28.010])
+MASS_AMU = np.array([43.044, 15.018, 28.052, 28.010, 30.052])
 TRAINING_SEED = 0
 DYNAMICS_SEEDS = (1, 2, 3)
 N_EPOCHS = 15

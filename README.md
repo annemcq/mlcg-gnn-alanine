@@ -46,7 +46,7 @@ Because the energy depends on pairwise distances, it is invariant to global tran
 
 ## Harmonic prior
 
-An initial version of the model used the GNN alone. Although the force-matching loss decreased during training, simulations driven by this model became unstable, with bead positions leaving the physically sensible extent observed for the reference molecule.
+An initial version used the GNN alone. The earlier claim that its dynamics ran away was not reproduced: three 5,000-step runs stayed near the reference extent, and a later 100,000-step check also kept bond lengths in the reference range. The reason to keep the bonded prior should instead be tested through the conformational distribution, not an unverified instability story.
 
 To constrain these degrees of freedom, the final model includes a harmonic prior on consecutive CG beads:
 
@@ -84,17 +84,17 @@ The main validation compares the conformational distribution sampled by the lear
 
 ![Ramachandran comparison](results/figures/ramachandran_comparison.png)
 
-The CG dynamics samples the main conformational regions of the reference trajectory in approximately the same areas of pseudo-phi/psi space. However, the relative populations and overall distribution are not reproduced well: the CG trajectory is more diffuse and also visits regions that are only sparsely populated in the reference data. A quantitative comparison of the 2D phi/psi histograms gives a Jensen-Shannon divergence of 0.4634 bits (36 bins per angle) between the mapped reference trajectory and the learned CG dynamics. The reference half-vs-half JSD is 0.0209 bits, while two independent 1,700-frame reference subsamples give 0.0784 bits; the CG-vs-reference difference is therefore about 5.9× larger than the latter finite-sample baseline. The three CG runs contribute 14,100 post-burn-in frames in total, so the remaining discrepancy is not explained by sampling noise alone. The result should be interpreted as evidence that the learned model does not reproduce the reference conformational populations quantitatively, despite sampling the same broad regions.
+The CG dynamics samples the main conformational regions of the reference trajectory in approximately the same areas of pseudo-phi/psi space. However, the relative populations and overall distribution are not reproduced well: the CG trajectory is more diffuse and also visits regions that are only sparsely populated in the reference data. A quantitative comparison of the 2D phi/psi histograms gives a Jensen-Shannon divergence of 0.4634 bits (36 bins per angle) between the mapped reference trajectory and the learned CG dynamics. The reference half-vs-half JSD is 0.0209 bits, while two independent 1,700-frame reference subsamples give 0.0784 bits; the CG-vs-reference difference is therefore about 5.9× larger than the latter finite-sample baseline. The three CG runs contribute 14,100 post-burn-in frames in total, and their mismatch is much larger than the reference subsampling baseline. The result should be interpreted as evidence that the learned model does not reproduce the reference conformational populations quantitatively, despite sampling the same broad regions.
 
 This suggests that the learned energy surface is not well constrained outside the configurations represented in the training trajectory.
 
 ## What I learned
 
-This project showed an important limitation of force matching: obtaining a decreasing force-matching loss does not by itself guarantee stable molecular dynamics.
+This project showed that a decreasing force-matching loss is not enough to establish whether the learned model reproduces the reference conformational distribution.
 
-A three-seed 5,000-step test of the GNN-only model does not reproduce the earlier instability claim: the maximum absolute bead displacement was 0.299, 0.308, and 0.294 nm for seeds 1–3, respectively, compared with an expected extent of roughly ±0.3 nm around the center of mass. The harmonic prior is therefore retained as a physically motivated component of the final model, but this short multi-seed test does not by itself establish that the GNN-only model is unstable.
+A three-seed 5,000-step test of the GNN-only model does not reproduce the earlier instability claim: the maximum absolute bead displacement was 0.299, 0.308, and 0.294 nm for seeds 1–3, respectively, compared with an expected extent of roughly ±0.3 nm around the center of mass. A preliminary distribution check gave JSD around 0.71 bits for GNN-only versus 0.46 bits for prior + GNN against the mapped reference. However, the GNN-only model was trained for 15 epochs and the correction for 60, so this is **not a controlled comparison**; an equal-epoch, multi-seed experiment is still needed before attributing the difference to the prior.
 
-The final model is therefore more stable, but the conformational distribution also shows that stability alone is not enough. Sampling regions that are poorly represented in the training data remains a problem.
+The final model's conformational distribution also shows that geometrically well-behaved dynamics are not enough. Sampling regions that are poorly represented in the training data remains a problem.
 
 For this small system, possible next steps would include longer or more diverse reference sampling, additional physically motivated priors, and validation over longer CG trajectories and additional random seeds.
 

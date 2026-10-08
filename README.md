@@ -84,7 +84,7 @@ The main validation compares the conformational distribution sampled by the lear
 
 ![Ramachandran comparison](results/figures/ramachandran_comparison.png)
 
-The CG dynamics samples the main conformational regions of the reference trajectory in approximately the same areas of pseudo-phi/psi space. However, the relative populations and overall distribution are not reproduced well: the CG trajectory is more diffuse and also visits regions that are only sparsely populated in the reference data. A quantitative comparison of the 2D phi/psi histograms gives a Jensen-Shannon divergence of 0.1917 bits (36 bins per angle). Splitting the reference trajectory in half gives a 0.0220-bit reference-vs-reference JSD with the same metric, so the AA-vs-CG difference is about 8.7× larger than this simple sampling-noise baseline. The two trajectories contain 20,000 samples each; the remaining difference is therefore not explained by the sample-count imbalance flagged in earlier drafts.
+The CG dynamics samples the main conformational regions of the reference trajectory in approximately the same areas of pseudo-phi/psi space. However, the relative populations and overall distribution are not reproduced well: the CG trajectory is more diffuse and also visits regions that are only sparsely populated in the reference data. A quantitative comparison of the 2D phi/psi histograms gives a Jensen-Shannon divergence of 0.4634 bits (36 bins per angle) between the mapped reference trajectory and the learned CG dynamics. The reference half-vs-half JSD is 0.0209 bits, while two independent 1,700-frame reference subsamples give 0.0784 bits; the CG-vs-reference difference is therefore about 5.9× larger than the latter finite-sample baseline. The three CG runs contribute 14,100 post-burn-in frames in total, so the remaining discrepancy is not explained by sampling noise alone. The result should be interpreted as evidence that the learned model does not reproduce the reference conformational populations quantitatively, despite sampling the same broad regions.
 
 This suggests that the learned energy surface is not well constrained outside the configurations represented in the training trajectory.
 
@@ -96,7 +96,7 @@ The GNN-only model could fit forces on sampled configurations while still produc
 
 The final model is therefore more stable, but the conformational distribution also shows that stability alone is not enough. Sampling regions that are poorly represented in the training data remains a problem.
 
-For this small system, possible next steps would include longer or more diverse reference sampling, additional physically motivated priors, and validation over longer CG trajectories.
+For this small system, possible next steps would include longer or more diverse reference sampling, additional physically motivated priors, and validation over longer CG trajectories and additional random seeds.
 
 ## Repository structure
 

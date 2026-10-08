@@ -22,7 +22,7 @@ C_ACE — N_ALA — CA_ALA — C_ALA — N_NME
 
 Each bead position is defined using the center of mass of its corresponding atom group, and the CG force is obtained by summing the atomic forces within that group.
 
-The mapping was also checked by comparing the backbone dihedral angles calculated from the atomistic and CG representations.
+The mapping was also checked by comparing the backbone dihedral angles calculated from the atomistic and CG representations. The phi cos/sin correlations were 0.961/0.910 and the psi correlations were 0.987/0.922; the mean absolute phi deviation was 9.6 degrees.
 
 ## Model
 
@@ -84,7 +84,7 @@ The main validation compares the conformational distribution sampled by the lear
 
 ![Ramachandran comparison](results/figures/ramachandran_comparison.png)
 
-The CG dynamics samples the main conformational regions of the reference trajectory in approximately the same areas of pseudo-phi/psi space. However, the relative populations and overall distribution are not reproduced well: the CG trajectory is more diffuse and also visits regions that are only sparsely populated in the reference data.
+The CG dynamics samples the main conformational regions of the reference trajectory in approximately the same areas of pseudo-phi/psi space. However, the relative populations and overall distribution are not reproduced well: the CG trajectory is more diffuse and also visits regions that are only sparsely populated in the reference data. A quantitative comparison of the 2D phi/psi histograms gives a Jensen-Shannon divergence of 0.1917 bits (36 bins per angle), confirming that the distributions are similar enough to overlap but still differ substantially in population.
 
 This suggests that the learned energy surface is not well constrained outside the configurations represented in the training trajectory.
 
@@ -92,7 +92,7 @@ This suggests that the learned energy surface is not well constrained outside th
 
 This project showed an important limitation of force matching: obtaining a decreasing force-matching loss does not by itself guarantee stable molecular dynamics.
 
-The GNN-only model could fit forces on sampled configurations while still producing unstable trajectories when used recursively during simulation. Adding a simple physical prior was necessary to keep the bonded degrees of freedom within a reasonable range.
+The GNN-only model could fit forces on sampled configurations while still producing unstable trajectories when used recursively during simulation. In a short 5,000-step test, bead positions ranged from -0.580 to 0.392 nm, compared with an expected molecular extent of roughly ±0.3 nm around the center of mass. Adding a simple physical prior was necessary to keep the bonded degrees of freedom within a reasonable range.
 
 The final model is therefore more stable, but the conformational distribution also shows that stability alone is not enough. Sampling regions that are poorly represented in the training data remains a problem.
 
@@ -119,7 +119,8 @@ mlcg-gnn-alanine/
 │
 ├── scripts/
 │   ├── 01_generate_reference_trajectory.py
-│   └── 02_train_cgnet.py
+│   ├── 02_train_cgnet.py
+│   └── 03_compare_conformational_distributions.py
 │
 ├── notebooks/
 │   └── 03_train_and_validate_cgnet.ipynb
@@ -128,6 +129,8 @@ mlcg-gnn-alanine/
 │   └── figures/
 │       ├── training_curve.png
 │       └── ramachandran_comparison.png
+│
+│   └── conformational_distribution_comparison.csv
 │
 ├── tests/
 │   └── test_cg_model.py

@@ -120,7 +120,9 @@ mlcg-gnn-alanine/
 ├── scripts/
 │   ├── 01_generate_reference_trajectory.py
 │   ├── 02_train_cgnet.py
-│   └── 03_compare_conformational_distributions.py
+│   ├── 03_compare_conformational_distributions.py
+│   ├── 04_test_pure_gnn_stability.py
+│   └── 05_compare_prior_ablation.py
 │
 ├── notebooks/
 │   └── 03_train_and_validate_cgnet.ipynb
@@ -165,6 +167,14 @@ Run the validation notebook:
 ```bash
 jupyter nbconvert --to notebook --execute --inplace notebooks/03_train_and_validate_cgnet.ipynb
 ```
+
+Run the controlled prior ablation (60 training epochs for both models, three 100,000-step dynamics seeds per model; writes `results/controlled_prior_ablation.csv` without overwriting the published weights):
+
+```bash
+python scripts/05_compare_prior_ablation.py
+```
+
+This experiment can take a long time on CPU. Only update the conclusions after checking its generated results.
 
 Run the tests:
 

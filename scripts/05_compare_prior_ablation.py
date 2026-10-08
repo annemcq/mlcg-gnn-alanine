@@ -137,8 +137,11 @@ def main():
             print(name, seed, "JSD", rows[-1]["jsd_bits"], flush=True)
         # Also report JSD of pooled frames, matching the main project's metric.
         pooled = np.concatenate(dihedrals, axis=0)
-        print(name, "pooled JSD bits:",
-              conformational_js_divergence(reference, pooled), flush=True)
+        pooled_jsd = conformational_js_divergence(reference, pooled)
+        for row in rows:
+            if row["model"] == name:
+                row["pooled_jsd_bits"] = pooled_jsd
+        print(name, "pooled JSD bits:", pooled_jsd, flush=True)
 
     output = OUT / "controlled_prior_ablation.csv"
     pd.DataFrame(rows).to_csv(output, index=False)

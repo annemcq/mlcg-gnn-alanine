@@ -14,7 +14,7 @@ import torch.nn as nn
 class RBFExpansion(nn.Module):
     """Expand a scalar distance into a vector of Gaussian radial basis functions."""
 
-    def __init__(self, d_min: float = 0.0, d_max: float = 1.2, n_gaussians: int = 32):
+    def __init__(self, d_min: float = 0.0, d_max: float = 1.0, n_gaussians: int = 32):
         super().__init__()
         centers = torch.linspace(d_min, d_max, n_gaussians)
         self.register_buffer("centers", centers)
@@ -71,7 +71,7 @@ class CGSchNetLike(nn.Module):
         n_features: int = 32,
         n_rbf: int = 32,
         n_interactions: int = 2,
-        d_max: float = 1.2,
+        d_max: float = 1.0,
     ):
         super().__init__()
         self.n_beads = n_beads

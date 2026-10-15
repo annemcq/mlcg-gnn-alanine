@@ -28,7 +28,7 @@ The mapping was also checked by comparing the backbone dihedral angles calculate
 
 The learned potential is based on a small SchNet-style graph neural network.
 
-For each configuration, the five CG beads form a fully connected graph. Pairwise distances are expanded using Gaussian radial basis functions and processed through continuous-filter interaction blocks.
+For each configuration, the five CG beads form a fully connected graph. The radial basis uses `d_max=1.0` nm in the released training and evaluation scripts and as the model default; this setting matters for reproducing checkpoints. Changing the basis range when reconstructing a model can alter energies and force predictions even if the learned parameters load successfully. Pairwise distances are expanded using Gaussian radial basis functions and processed through continuous-filter interaction blocks.
 
 The network predicts a scalar energy
 
@@ -84,9 +84,11 @@ The main validation compares the conformational distribution sampled by the lear
 
 ![Ramachandran comparison](results/figures/ramachandran_comparison.png)
 
+*Figure provenance: the displayed plot comes from an earlier single-seed, 80 ps run with 1,700 retained frames. The JSD = 0.4634 bits quoted below instead uses three CG runs totalling 14,100 post-burn-in frames; the image is illustrative and not the plotted data for that pooled statistic.*
+
 The CG dynamics samples the main conformational regions of the reference trajectory in approximately the same areas of pseudo-phi/psi space. However, the relative populations and overall distribution are not reproduced well: the CG trajectory is more diffuse and also visits regions that are only sparsely populated in the reference data. A quantitative comparison of the 2D phi/psi histograms gives a Jensen-Shannon divergence of 0.4634 bits (36 bins per angle) between the mapped reference trajectory and the learned CG dynamics. The reference half-vs-half JSD is 0.0209 bits, while two independent 1,700-frame reference subsamples give 0.0784 bits; the CG-vs-reference difference is therefore about 5.9× larger than the latter finite-sample baseline. The three CG runs contribute 14,100 post-burn-in frames in total, and their mismatch is much larger than the reference subsampling baseline. The result should be interpreted as evidence that the learned model does not reproduce the reference conformational populations quantitatively, despite sampling the same broad regions.
 
-This suggests that the learned energy surface is not well constrained outside the configurations represented in the training trajectory.
+This suggests that the learned energy surface is not well constrained outside the configurations represented in the training trajectory. Moreover, the GNN correction uses only pairwise distances: its energy is exactly invariant under reflections (including mirror-image configurations), so it cannot distinguish enantiomeric/chiral configurations from distances alone. This architectural limitation is separate from limited training coverage and does not imply that a particular reflected structure was sampled in these dynamics. The bonded prior also depends on distances, so it does not remove this mirror symmetry.
 
 ## What I learned
 

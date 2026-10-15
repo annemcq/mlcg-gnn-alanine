@@ -232,3 +232,12 @@ def test_js_divergence_is_zero_for_identical_distributions():
 
     p = np.array([0.2, 0.3, 0.5])
     assert abs(js_divergence(p, p)) < 1e-10
+
+
+def test_default_radial_basis_range_matches_released_training():
+    """Loading old weights without explicitly setting d_max must retain the released basis."""
+    from src.cg_gnn_model import RBFExpansion
+    basis = RBFExpansion(n_gaussians=32)
+    assert torch.isclose(basis.centers[-1], torch.tensor(1.0))
+    model = CGSchNetLike(n_beads=5)
+    assert torch.isclose(model.rbf.centers[-1], torch.tensor(1.0))
